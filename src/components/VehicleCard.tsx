@@ -49,7 +49,7 @@ export function VehicleCard({
             <p className="text-gray-400 text-sm sm:text-base">{vehicle.year}</p>
           </div>
           <p className="text-xl sm:text-2xl font-bold text-blue-500 flex-shrink-0">
-            ${vehicle.price.toLocaleString()}
+            ₱{vehicle.price.toLocaleString()}
           </p>
         </div>
 

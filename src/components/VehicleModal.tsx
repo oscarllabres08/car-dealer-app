@@ -45,7 +45,7 @@ export function VehicleModal({ vehicle, onClose }: VehicleModalProps) {
             </div>
             <div className="text-left sm:text-right">
               <p className="text-3xl sm:text-4xl font-bold text-blue-500">
-                ${vehicle.price.toLocaleString()}
+                ₱{vehicle.price.toLocaleString()}
               </p>
             </div>
           </div>

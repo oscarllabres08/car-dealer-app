@@ -135,7 +135,7 @@ export function VehicleFormModal({ vehicle, onClose, onSubmit }: VehicleFormModa
 
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-gray-300 mb-2 font-medium">Price ($)</label>
+              <label className="block text-gray-300 mb-2 font-medium">Price (₱)</label>
               <input
                 type="number"
                 value={formData.price}
