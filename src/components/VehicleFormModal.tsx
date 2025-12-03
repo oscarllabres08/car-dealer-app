@@ -5,7 +5,7 @@ import { Vehicle, supabase } from '../lib/supabase';
 const MAKES = ['Toyota', 'Honda', 'Ford', 'Hyundai', 'Mitsubishi', 'Suzuki', 'Nissan', 'Mazda', 'Chevrolet'];
 const CATEGORIES = ['Sedan', 'Hatchback', 'SUV', 'Van', 'Pick up'];
 const TRANSMISSIONS = ['Automatic', 'Manual'];
-const FUEL_TYPES = ['Petrol', 'Diesel', 'Hybrid', 'Electric'];
+const FUEL_TYPES = ['Diesel', 'Gasoline'];
 
 interface VehicleFormModalProps {
   vehicle: Vehicle | null;
