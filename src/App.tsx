@@ -1,6 +1,6 @@
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { Home } from './pages/Home';
-import { UserDashboard } from './pages/UserDashboard';
+import { Showroom } from './pages/Showroom';
+import { AdminDashboard } from './pages/AdminDashboard';
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -16,7 +16,7 @@ function AppContent() {
     );
   }
 
-  return user ? <UserDashboard /> : <Home />;
+  return user ? <AdminDashboard /> : <Showroom />;
 }
 
 function App() {
