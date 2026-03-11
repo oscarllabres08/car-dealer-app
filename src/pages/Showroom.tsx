@@ -37,27 +37,29 @@ export function Showroom() {
   }, [vehicles, selectedCategory, selectedBrand, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800">
       <Header onAdminClick={() => setShowLoginModal(true)} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
-        <div className="mb-6 sm:mb-8 space-y-4">
+        <div className="mb-6 sm:mb-8 space-y-4 animate-fade-in-down">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-2 sm:mb-3">Our Inventory</h2>
-            <p className="text-gray-400 text-base sm:text-lg">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-2 sm:mb-3 gradient-text animate-fade-in">
+              Our Inventory
+            </h2>
+            <p className="text-gray-400 text-base sm:text-lg animate-fade-in stagger-1">
               Browse our extensive collection of quality vehicles.
             </p>
           </div>
 
-          <div className="max-w-xl">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <div className="max-w-xl animate-fade-in stagger-2">
+            <div className="relative group">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 transition-transform duration-300 group-focus-within:scale-110 group-focus-within:text-blue-500" />
               <input
                 type="text"
                 placeholder="Search by brand, model, or year..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-slate-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-500 text-sm sm:text-base"
+                className="w-full pl-10 pr-4 py-3 bg-slate-800/80 backdrop-blur-sm text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-slate-800 placeholder:text-gray-500 text-sm sm:text-base transition-all duration-300 border border-slate-700 hover:border-slate-600"
               />
             </div>
           </div>
@@ -84,11 +86,12 @@ export function Showroom() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {filteredVehicles.map((vehicle) => (
+            {filteredVehicles.map((vehicle, index) => (
               <VehicleCard
                 key={vehicle.id}
                 vehicle={vehicle}
                 onViewDetails={setSelectedVehicle}
+                index={index}
               />
             ))}
           </div>

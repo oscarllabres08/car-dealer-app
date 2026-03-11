@@ -90,17 +90,19 @@ export function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800">
+      <header className="bg-slate-900/95 backdrop-blur-md border-b border-slate-800/50 sticky top-0 z-50 shadow-lg animate-fade-in-down">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2 sm:space-x-3">
-              <Car className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 flex-shrink-0" />
-              <h1 className="text-lg sm:text-2xl font-bold tracking-tight text-white truncate">VELOCITY MOTORS</h1>
+            <div className="flex items-center space-x-2 sm:space-x-3 group">
+              <Car className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 flex-shrink-0 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
+              <h1 className="text-lg sm:text-2xl font-bold tracking-tight text-white truncate bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                VELOCITY MOTORS
+              </h1>
             </div>
             <button
               onClick={() => signOut()}
-              className="flex items-center space-x-2 px-3 sm:px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors text-sm sm:text-base flex-shrink-0"
+              className="flex items-center space-x-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-lg transition-all duration-300 text-sm sm:text-base flex-shrink-0 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-red-500/50"
             >
               <LogOut className="w-4 h-4" />
               <span className="hidden sm:inline">Exit Admin</span>
@@ -111,30 +113,32 @@ export function AdminDashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8 animate-fade-in-down">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-blue-500 mb-2">Admin Dashboard</h2>
-            <p className="text-gray-400 text-base sm:text-lg">Manage your vehicle inventory.</p>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent animate-fade-in">
+              Admin Dashboard
+            </h2>
+            <p className="text-gray-400 text-base sm:text-lg animate-fade-in stagger-1">Manage your vehicle inventory.</p>
           </div>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center justify-center space-x-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors w-full sm:w-auto"
+            className="flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-blue-500/50 animate-fade-in stagger-2"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-5 h-5 transition-transform duration-300 group-hover:rotate-90" />
             <span>Add Vehicle</span>
           </button>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-6 sm:mb-8">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6 sm:mb-8 animate-fade-in stagger-3">
           <div className="flex-1 w-full sm:min-w-[250px]">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <div className="relative group">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 transition-transform duration-300 group-focus-within:scale-110 group-focus-within:text-blue-500" />
               <input
                 type="text"
                 placeholder="Search inventory..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-slate-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-3 bg-slate-800/80 backdrop-blur-sm text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-slate-800 transition-all duration-300 border border-slate-700 hover:border-slate-600"
               />
             </div>
           </div>
@@ -142,13 +146,13 @@ export function AdminDashboard() {
           <div className="relative">
             <button
               onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-              className="flex items-center gap-2 px-4 py-3 bg-slate-800 text-gray-300 rounded-lg hover:bg-slate-700 transition-colors min-w-[150px] justify-between"
+              className="flex items-center gap-2 px-4 py-3 bg-slate-800/80 backdrop-blur-sm text-gray-300 rounded-lg hover:bg-slate-700 transition-all duration-300 min-w-[150px] justify-between border border-slate-700 hover:border-slate-600 transform hover:scale-105 active:scale-95"
             >
               <span>{selectedStatus}</span>
-              <ChevronDown className="w-4 h-4" />
+              <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${showStatusDropdown ? 'rotate-180' : ''}`} />
             </button>
             {showStatusDropdown && (
-              <div className="absolute top-full left-0 mt-2 w-full bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-10">
+              <div className="absolute top-full left-0 mt-2 w-full bg-slate-800/95 backdrop-blur-md border border-slate-700 rounded-lg shadow-2xl z-10 animate-fade-in-down">
                 {STATUSES.map((status) => (
                   <button
                     key={status}
@@ -156,8 +160,8 @@ export function AdminDashboard() {
                       setSelectedStatus(status);
                       setShowStatusDropdown(false);
                     }}
-                    className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-colors ${
-                      selectedStatus === status ? 'bg-blue-600 text-white' : 'text-gray-300'
+                    className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-all duration-300 transform hover:translate-x-1 ${
+                      selectedStatus === status ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white' : 'text-gray-300'
                     }`}
                   >
                     {status}
@@ -170,13 +174,13 @@ export function AdminDashboard() {
           <div className="relative">
             <button
               onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-              className="flex items-center gap-2 px-4 py-3 bg-slate-800 text-gray-300 rounded-lg hover:bg-slate-700 transition-colors min-w-[170px] justify-between"
+              className="flex items-center gap-2 px-4 py-3 bg-slate-800/80 backdrop-blur-sm text-gray-300 rounded-lg hover:bg-slate-700 transition-all duration-300 min-w-[170px] justify-between border border-slate-700 hover:border-slate-600 transform hover:scale-105 active:scale-95"
             >
               <span>{selectedCategory}</span>
-              <ChevronDown className="w-4 h-4" />
+              <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${showCategoryDropdown ? 'rotate-180' : ''}`} />
             </button>
             {showCategoryDropdown && (
-              <div className="absolute top-full left-0 mt-2 w-full bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-10">
+              <div className="absolute top-full left-0 mt-2 w-full bg-slate-800/95 backdrop-blur-md border border-slate-700 rounded-lg shadow-2xl z-10 animate-fade-in-down">
                 {CATEGORIES.map((category) => (
                   <button
                     key={category}
@@ -184,8 +188,8 @@ export function AdminDashboard() {
                       setSelectedCategory(category);
                       setShowCategoryDropdown(false);
                     }}
-                    className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-colors ${
-                      selectedCategory === category ? 'bg-blue-600 text-white' : 'text-gray-300'
+                    className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-all duration-300 transform hover:translate-x-1 ${
+                      selectedCategory === category ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white' : 'text-gray-300'
                     }`}
                   >
                     {category}
@@ -209,7 +213,7 @@ export function AdminDashboard() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {filteredVehicles.map((vehicle) => (
+            {filteredVehicles.map((vehicle, index) => (
               <VehicleCard
                 key={vehicle.id}
                 vehicle={vehicle}
@@ -218,6 +222,7 @@ export function AdminDashboard() {
                 onEdit={setEditingVehicle}
                 onDelete={handleDeleteVehicle}
                 onToggleStatus={handleToggleStatus}
+                index={index}
               />
             ))}
           </div>

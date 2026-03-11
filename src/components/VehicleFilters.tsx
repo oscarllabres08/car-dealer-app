@@ -29,10 +29,10 @@ export function VehicleFilters({
             <button
               key={category}
               onClick={() => onCategoryChange(category)}
-              className={`px-4 py-2 rounded-full font-medium transition-colors whitespace-nowrap text-sm sm:text-base ${
+              className={`px-4 py-2 rounded-full font-medium transition-all duration-300 whitespace-nowrap text-sm sm:text-base transform hover:scale-110 active:scale-95 ${
                 selectedCategory === category
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
+                  ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/50 scale-105'
+                  : 'bg-slate-700 text-gray-300 hover:bg-slate-600 hover:shadow-md'
               }`}
             >
               {category}
@@ -46,7 +46,7 @@ export function VehicleFilters({
         <div className="relative">
           <button
             onClick={() => setShowBrandDropdown(!showBrandDropdown)}
-            className="flex items-center gap-2 px-4 py-2 bg-slate-700 text-gray-300 rounded-lg hover:bg-slate-600 transition-colors min-w-[140px] justify-between w-full sm:w-auto"
+            className="flex items-center gap-2 px-4 py-2 bg-slate-700 text-gray-300 rounded-lg hover:bg-slate-600 transition-all duration-300 transform hover:scale-105 active:scale-95 min-w-[140px] justify-between w-full sm:w-auto border border-slate-600 hover:border-slate-500"
           >
             <span className="truncate">{selectedBrand}</span>
             {selectedBrand !== 'All' ? (
@@ -64,7 +64,7 @@ export function VehicleFilters({
           </button>
 
           {showBrandDropdown && (
-            <div className="absolute top-full left-0 mt-2 w-full sm:w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-10 max-h-64 overflow-y-auto">
+            <div className="absolute top-full left-0 mt-2 w-full sm:w-48 bg-slate-800/95 backdrop-blur-md border border-slate-700 rounded-lg shadow-2xl z-10 max-h-64 overflow-y-auto animate-fade-in-down">
               {brands.map((brand) => (
                 <button
                   key={brand}
@@ -72,8 +72,8 @@ export function VehicleFilters({
                     onBrandChange(brand);
                     setShowBrandDropdown(false);
                   }}
-                  className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-colors ${
-                    selectedBrand === brand ? 'bg-blue-600 text-white' : 'text-gray-300'
+                  className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-all duration-300 transform hover:translate-x-1 ${
+                    selectedBrand === brand ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white' : 'text-gray-300'
                   }`}
                 >
                   {brand}

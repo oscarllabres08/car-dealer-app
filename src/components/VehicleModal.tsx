@@ -10,17 +10,24 @@ export function VehicleModal({ vehicle, onClose }: VehicleModalProps) {
   if (!vehicle) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-2 sm:p-4">
-      <div className="bg-slate-800 rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
-        <div className="relative">
+    <div 
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4 animate-fade-in"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-slate-800/95 backdrop-blur-md rounded-xl sm:rounded-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto animate-scale-in border border-slate-700/50 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="relative overflow-hidden">
           <img
             src={vehicle.image_url}
             alt={`${vehicle.make} ${vehicle.model}`}
-            className="w-full h-48 sm:h-64 md:h-96 object-cover rounded-t-xl sm:rounded-t-2xl"
+            className="w-full h-48 sm:h-64 md:h-96 object-cover rounded-t-xl sm:rounded-t-2xl transition-transform duration-500 hover:scale-105"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"></div>
           <button
             onClick={onClose}
-            className="absolute top-2 right-2 sm:top-4 sm:right-4 p-2 bg-slate-900 bg-opacity-80 hover:bg-opacity-100 rounded-full text-white transition-colors"
+            className="absolute top-2 right-2 sm:top-4 sm:right-4 p-2 bg-slate-900/80 backdrop-blur-sm hover:bg-slate-900 rounded-full text-white transition-all duration-300 transform hover:scale-110 hover:rotate-90 z-10 border border-slate-700/50"
           >
             <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
