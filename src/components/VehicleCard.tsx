@@ -1,5 +1,6 @@
-import { Gauge, Fuel, Settings } from 'lucide-react';
+import { Gauge, Fuel, Settings, MessageCircle } from 'lucide-react';
 import { Vehicle } from '../lib/supabase';
+import { MESSENGER_URL } from '../lib/contact';
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -22,6 +23,10 @@ export function VehicleCard({
 }: VehicleCardProps) {
   const isSold = vehicle.status === 'sold';
   const staggerDelay = `stagger-${Math.min(index % 6, 5)}`;
+
+  const ref = `${vehicle.make} ${vehicle.model} | ${vehicle.year} | ₱${vehicle.price.toLocaleString()}`;
+  const separator = MESSENGER_URL.includes('?') ? '&' : '?';
+  const messengerLink = `${MESSENGER_URL}${separator}ref=${encodeURIComponent(ref)}`;
 
   return (
     <div 
@@ -86,12 +91,24 @@ export function VehicleCard({
         </div>
 
         {!showActions ? (
-          <button
-            onClick={() => onViewDetails(vehicle)}
-            className="w-full py-1.5 sm:py-2.5 md:py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-blue-500/50 text-xs sm:text-sm md:text-base"
-          >
-            View Details
-          </button>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => onViewDetails(vehicle)}
+              className="w-full py-1.5 sm:py-2.5 md:py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-blue-500/50 text-xs sm:text-sm md:text-base"
+            >
+              View Details
+            </button>
+            <a
+              href={messengerLink}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full py-1.5 sm:py-2.5 md:py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg text-xs sm:text-sm md:text-base inline-flex items-center justify-center gap-2"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Message
+            </a>
+          </div>
         ) : (
           <div className="space-y-1.5 sm:space-y-2">
             <div className="grid grid-cols-2 gap-1.5 sm:gap-2">

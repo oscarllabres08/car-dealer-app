@@ -5,6 +5,7 @@ import { VehicleFormModal } from '../components/VehicleFormModal';
 import { useAuth } from '../contexts/AuthContext';
 import { useVehicles } from '../hooks/useVehicles';
 import { supabase, Vehicle } from '../lib/supabase';
+import { FinancingCalculator } from '../components/financing/FinancingCalculator';
 
 const CATEGORIES = ['All Categories', 'Sedan', 'Hatchback', 'SUV', 'Van', 'Pick up'];
 const STATUSES = ['All Status', 'available', 'sold'];
@@ -12,6 +13,7 @@ const STATUSES = ['All Status', 'available', 'sold'];
 export function AdminDashboard() {
   const { signOut } = useAuth();
   const { vehicles, loading, refetch } = useVehicles();
+  const [activeView, setActiveView] = useState<'inventory' | 'financing'>('inventory');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [selectedStatus, setSelectedStatus] = useState('All Status');
@@ -118,115 +120,164 @@ export function AdminDashboard() {
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent animate-fade-in">
               Admin Dashboard
             </h2>
-            <p className="text-gray-400 text-sm sm:text-base md:text-lg animate-fade-in stagger-1">Manage your vehicle inventory.</p>
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg animate-fade-in stagger-1">
+              Manage your inventory and tools.
+            </p>
           </div>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center justify-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-blue-500/50 animate-fade-in stagger-2 text-sm sm:text-base"
-          >
-            <Plus className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:rotate-90" />
-            <span>Add Vehicle</span>
-          </button>
+          {activeView === 'inventory' && (
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="flex items-center justify-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition-all duration-300 w-full sm:w-auto transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-blue-500/50 animate-fade-in stagger-2 text-sm sm:text-base"
+            >
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:rotate-90" />
+              <span>Add Vehicle</span>
+            </button>
+          )}
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4 sm:mb-6 md:mb-8 animate-fade-in stagger-3">
-          <div className="flex-1 w-full sm:min-w-[200px] md:min-w-[250px]">
-            <div className="relative group">
-              <Search className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-focus-within:scale-110 group-focus-within:text-blue-500" />
-              <input
-                type="text"
-                placeholder="Search inventory..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 bg-slate-800/80 backdrop-blur-sm text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-slate-800 transition-all duration-300 border border-slate-700 hover:border-slate-600 text-xs sm:text-sm md:text-base"
-              />
+        <div className="mb-4 sm:mb-6 md:mb-8 animate-fade-in stagger-3">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+            <div className="flex w-full sm:w-auto rounded-xl bg-slate-800/80 border border-slate-700 p-1 backdrop-blur-sm">
+              <button
+                type="button"
+                onClick={() => setActiveView('inventory')}
+                className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
+                  activeView === 'inventory'
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-700/60'
+                }`}
+              >
+                Inventory
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveView('financing')}
+                className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
+                  activeView === 'financing'
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-700/60'
+                }`}
+              >
+                Financing Calculator
+              </button>
             </div>
-          </div>
-
-          <div className="relative">
-            <button
-              onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-              className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 bg-slate-800/80 backdrop-blur-sm text-gray-300 rounded-lg hover:bg-slate-700 transition-all duration-300 min-w-[120px] sm:min-w-[150px] justify-between border border-slate-700 hover:border-slate-600 transform hover:scale-105 active:scale-95 text-xs sm:text-sm"
-            >
-              <span className="truncate">{selectedStatus}</span>
-              <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 flex-shrink-0 ${showStatusDropdown ? 'rotate-180' : ''}`} />
-            </button>
-            {showStatusDropdown && (
-              <div className="absolute top-full left-0 mt-2 w-full bg-slate-800/95 backdrop-blur-md border border-slate-700 rounded-lg shadow-2xl z-10 animate-fade-in-down">
-                {STATUSES.map((status) => (
-                  <button
-                    key={status}
-                    onClick={() => {
-                      setSelectedStatus(status);
-                      setShowStatusDropdown(false);
-                    }}
-                    className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-all duration-300 transform hover:translate-x-1 ${
-                      selectedStatus === status ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white' : 'text-gray-300'
-                    }`}
-                  >
-                    {status}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="relative">
-            <button
-              onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-              className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 bg-slate-800/80 backdrop-blur-sm text-gray-300 rounded-lg hover:bg-slate-700 transition-all duration-300 min-w-[140px] sm:min-w-[170px] justify-between border border-slate-700 hover:border-slate-600 transform hover:scale-105 active:scale-95 text-xs sm:text-sm"
-            >
-              <span className="truncate">{selectedCategory}</span>
-              <ChevronDown className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 flex-shrink-0 ${showCategoryDropdown ? 'rotate-180' : ''}`} />
-            </button>
-            {showCategoryDropdown && (
-              <div className="absolute top-full left-0 mt-2 w-full bg-slate-800/95 backdrop-blur-md border border-slate-700 rounded-lg shadow-2xl z-10 animate-fade-in-down">
-                {CATEGORIES.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => {
-                      setSelectedCategory(category);
-                      setShowCategoryDropdown(false);
-                    }}
-                    className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-all duration-300 transform hover:translate-x-1 ${
-                      selectedCategory === category ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white' : 'text-gray-300'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
         </div>
 
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-              <p className="text-gray-400">Loading vehicles...</p>
+        {activeView === 'inventory' && (
+          <>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4 sm:mb-6 md:mb-8 animate-fade-in stagger-3">
+              <div className="flex-1 w-full sm:min-w-[200px] md:min-w-[250px]">
+                <div className="relative group">
+                  <Search className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-focus-within:scale-110 group-focus-within:text-blue-500" />
+                  <input
+                    type="text"
+                    placeholder="Search inventory..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-3 bg-slate-800/80 backdrop-blur-sm text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-slate-800 transition-all duration-300 border border-slate-700 hover:border-slate-600 text-xs sm:text-sm md:text-base"
+                  />
+                </div>
+              </div>
+
+              <div className="relative">
+                <button
+                  onClick={() => setShowStatusDropdown(!showStatusDropdown)}
+                  className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 bg-slate-800/80 backdrop-blur-sm text-gray-300 rounded-lg hover:bg-slate-700 transition-all duration-300 min-w-[120px] sm:min-w-[150px] justify-between border border-slate-700 hover:border-slate-600 transform hover:scale-105 active:scale-95 text-xs sm:text-sm"
+                >
+                  <span className="truncate">{selectedStatus}</span>
+                  <ChevronDown
+                    className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 flex-shrink-0 ${showStatusDropdown ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                {showStatusDropdown && (
+                  <div className="absolute top-full left-0 mt-2 w-full bg-slate-800/95 backdrop-blur-md border border-slate-700 rounded-lg shadow-2xl z-10 animate-fade-in-down">
+                    {STATUSES.map((status) => (
+                      <button
+                        key={status}
+                        onClick={() => {
+                          setSelectedStatus(status);
+                          setShowStatusDropdown(false);
+                        }}
+                        className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-all duration-300 transform hover:translate-x-1 ${
+                          selectedStatus === status
+                            ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white'
+                            : 'text-gray-300'
+                        }`}
+                      >
+                        {status}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="relative">
+                <button
+                  onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                  className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 bg-slate-800/80 backdrop-blur-sm text-gray-300 rounded-lg hover:bg-slate-700 transition-all duration-300 min-w-[140px] sm:min-w-[170px] justify-between border border-slate-700 hover:border-slate-600 transform hover:scale-105 active:scale-95 text-xs sm:text-sm"
+                >
+                  <span className="truncate">{selectedCategory}</span>
+                  <ChevronDown
+                    className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 flex-shrink-0 ${showCategoryDropdown ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                {showCategoryDropdown && (
+                  <div className="absolute top-full left-0 mt-2 w-full bg-slate-800/95 backdrop-blur-md border border-slate-700 rounded-lg shadow-2xl z-10 animate-fade-in-down">
+                    {CATEGORIES.map((category) => (
+                      <button
+                        key={category}
+                        onClick={() => {
+                          setSelectedCategory(category);
+                          setShowCategoryDropdown(false);
+                        }}
+                        className={`w-full text-left px-4 py-2 hover:bg-slate-700 transition-all duration-300 transform hover:translate-x-1 ${
+                          selectedCategory === category
+                            ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white'
+                            : 'text-gray-300'
+                        }`}
+                      >
+                        {category}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ) : filteredVehicles.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-gray-400 text-lg">No vehicles found matching your filters.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
-            {filteredVehicles.map((vehicle, index) => (
-              <VehicleCard
-                key={vehicle.id}
-                vehicle={vehicle}
-                onViewDetails={() => {}}
-                showActions
-                onEdit={setEditingVehicle}
-                onDelete={handleDeleteVehicle}
-                onToggleStatus={handleToggleStatus}
-                index={index}
-              />
-            ))}
-          </div>
+
+            {loading ? (
+              <div className="flex items-center justify-center py-20">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                  <p className="text-gray-400">Loading vehicles...</p>
+                </div>
+              </div>
+            ) : filteredVehicles.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-gray-400 text-lg">
+                  No vehicles found matching your filters.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
+                {filteredVehicles.map((vehicle, index) => (
+                  <VehicleCard
+                    key={vehicle.id}
+                    vehicle={vehicle}
+                    onViewDetails={() => {}}
+                    showActions
+                    onEdit={setEditingVehicle}
+                    onDelete={handleDeleteVehicle}
+                    onToggleStatus={handleToggleStatus}
+                    index={index}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         )}
+
+        {activeView === 'financing' && <FinancingCalculator />}
       </main>
 
       {showAddModal && (

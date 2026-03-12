@@ -5,7 +5,7 @@ import { Vehicle, supabase } from '../lib/supabase';
 const MAKES = ['Toyota', 'Honda', 'Ford', 'Hyundai', 'Mitsubishi', 'Suzuki', 'Nissan', 'Mazda', 'Chevrolet'];
 const CATEGORIES = ['Sedan', 'Hatchback', 'SUV', 'Van', 'Pick up'];
 const TRANSMISSIONS = ['Automatic', 'Manual'];
-const FUEL_TYPES = ['Diesel', 'Gasoline'];
+const FUEL_TYPES = ['Petrol', 'Diesel', 'Gasoline', 'Others'] as const;
 
 interface VehicleFormModalProps {
   vehicle: Vehicle | null;
@@ -25,12 +25,17 @@ export function VehicleFormModal({ vehicle, onClose, onSubmit }: VehicleFormModa
     fuel_type: 'Petrol',
     image_url: ''
   });
+  const [fuelSelection, setFuelSelection] = useState<(typeof FUEL_TYPES)[number]>('Petrol');
+  const [customFuelType, setCustomFuelType] = useState('');
   const [loading, setLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     if (vehicle) {
+      const matchesPreset = (FUEL_TYPES as readonly string[]).includes(vehicle.fuel_type);
+      const initialFuelSelection = matchesPreset ? (vehicle.fuel_type as (typeof FUEL_TYPES)[number]) : 'Others';
+
       setFormData({
         make: vehicle.make,
         model: vehicle.model,
@@ -42,9 +47,13 @@ export function VehicleFormModal({ vehicle, onClose, onSubmit }: VehicleFormModa
         fuel_type: vehicle.fuel_type,
         image_url: vehicle.image_url
       });
+      setFuelSelection(initialFuelSelection);
+      setCustomFuelType(matchesPreset ? '' : vehicle.fuel_type);
       setImagePreview(vehicle.image_url);
     } else {
       setImagePreview(null);
+      setFuelSelection('Petrol');
+      setCustomFuelType('');
     }
   }, [vehicle]);
 
@@ -80,8 +89,12 @@ export function VehicleFormModal({ vehicle, onClose, onSubmit }: VehicleFormModa
         imageUrlToUse = publicUrlData.publicUrl;
       }
 
+      const resolvedFuelType =
+        fuelSelection === 'Others' ? customFuelType.trim() : fuelSelection;
+
       await onSubmit({
         ...formData,
+        fuel_type: resolvedFuelType || 'Petrol',
         image_url: imageUrlToUse
       });
     } finally {
@@ -218,8 +231,14 @@ export function VehicleFormModal({ vehicle, onClose, onSubmit }: VehicleFormModa
             <div>
               <label className="block text-gray-300 mb-2 font-medium">Fuel Type</label>
               <select
-                value={formData.fuel_type}
-                onChange={(e) => setFormData({ ...formData, fuel_type: e.target.value })}
+                value={fuelSelection}
+                onChange={(e) => {
+                  const next = e.target.value as (typeof FUEL_TYPES)[number];
+                  setFuelSelection(next);
+                  if (next !== 'Others') {
+                    setCustomFuelType('');
+                  }
+                }}
                 className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               >
@@ -229,6 +248,16 @@ export function VehicleFormModal({ vehicle, onClose, onSubmit }: VehicleFormModa
                   </option>
                 ))}
               </select>
+              {fuelSelection === 'Others' && (
+                <input
+                  type="text"
+                  value={customFuelType}
+                  onChange={(e) => setCustomFuelType(e.target.value)}
+                  className="mt-3 w-full px-4 py-3 bg-slate-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter fuel type (e.g. Electric)"
+                  required
+                />
+              )}
             </div>
           </div>
 
