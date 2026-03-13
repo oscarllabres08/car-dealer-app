@@ -29,10 +29,10 @@ export function VehicleFilters({
             <button
               key={category}
               onClick={() => onCategoryChange(category)}
-              className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full font-medium transition-all duration-300 whitespace-nowrap text-xs sm:text-sm md:text-base transform hover:scale-110 active:scale-95 ${
+              className={`flex-none inline-flex items-center justify-center h-8 sm:h-9 md:h-10 w-20 sm:w-24 md:w-28 rounded-md font-medium transition-colors duration-200 whitespace-nowrap text-xs sm:text-sm md:text-base truncate ${
                 selectedCategory === category
-                  ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/50 scale-105'
-                  : 'bg-slate-700 text-gray-300 hover:bg-slate-600 hover:shadow-md'
+                  ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/50'
+                  : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
               }`}
             >
               {category}

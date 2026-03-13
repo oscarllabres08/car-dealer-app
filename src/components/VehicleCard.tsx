@@ -95,17 +95,17 @@ export function VehicleCard({
             <button
               type="button"
               onClick={() => onViewDetails(vehicle)}
-              className="w-full py-1.5 sm:py-2.5 md:py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-blue-500/50 text-xs sm:text-sm md:text-base"
+              className="w-full min-h-[34px] sm:min-h-[38px] md:min-h-[42px] px-3 py-1.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition-colors duration-200 shadow-lg hover:shadow-blue-500/50 text-xs sm:text-sm md:text-base leading-none inline-flex items-center justify-center"
             >
-              View Details
+              Details
             </button>
             <a
               href={messengerLink}
               target="_blank"
               rel="noreferrer"
-              className="w-full py-1.5 sm:py-2.5 md:py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg text-xs sm:text-sm md:text-base inline-flex items-center justify-center gap-2"
+              className="w-full min-h-[34px] sm:min-h-[38px] md:min-h-[42px] px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg text-xs sm:text-sm md:text-base leading-none inline-flex items-center justify-center gap-2"
             >
-              <MessageCircle className="w-4 h-4" />
+              <MessageCircle className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
               Message
             </a>
           </div>
